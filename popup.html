@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>쿠팡 AI 리뷰 요약기</title>
   <link rel="stylesheet" href="popup.css">
+  <script>
+    if (window.self !== window.top) {
+      document.documentElement.classList.add('is-in-iframe');
+    }
+  </script>
 </head>
 
 <body>

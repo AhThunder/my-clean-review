@@ -52,6 +52,28 @@ html {
   min-height: 580px;
 }
 
+/* In-Page Side Drawer Mode (쿠팡 플로팅 버튼으로 열린 iframe 환경) */
+html.is-in-iframe {
+  height: 100% !important;
+  min-height: 100% !important;
+}
+
+body.is-in-iframe {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  transition: none !important;
+}
+
+body.is-in-iframe .app-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, "Apple SD Gothic Neo", sans-serif;
   background-color: var(--bg-app);

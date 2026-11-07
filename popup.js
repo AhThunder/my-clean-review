@@ -4,6 +4,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
+  if (window.self !== window.top) {
+    document.documentElement.classList.add('is-in-iframe');
+    document.body.classList.add('is-in-iframe');
+  }
+
   const isExtensionEnv = typeof chrome !== 'undefined' && chrome.runtime && !!chrome.runtime.id;
 
   // ----------------------------------------------------
@@ -197,12 +202,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   adjustPopupLayoutToScreen();
 
   // ----------------------------------------------------
-  // Dynamic Screen & Viewport Layout Adaptor (세로 화면 / 유동 높이 조절)
+  // Dynamic Screen & Viewport Layout Adaptor (사이드 드로어 / 세로 화면 유동 조절)
   // ----------------------------------------------------
   function adjustPopupLayoutToScreen() {
+    const isIframe = window.self !== window.top;
+
+    if (isIframe) {
+      // 쿠팡 인페이지 플로팅 버튼으로 열린 사이드 드로어(iframe) 환경:
+      // 드로어 패널 높이(100vh)에 맞춰 항상 100% 전체 높이를 채워야
+      // 노트북, 데스크탑 등 어떤 화면 크기에서도 하단 액션 바가 맨 밑에 완벽 밀착됩니다.
+      document.documentElement.classList.add('is-in-iframe');
+      document.body.classList.add('is-in-iframe');
+      document.documentElement.style.height = '100%';
+      document.body.style.height = '100%';
+      document.body.style.maxHeight = '100%';
+      document.body.style.width = '100%';
+      const container = document.getElementById('appContainer');
+      if (container) {
+        container.style.height = '100%';
+        container.style.maxHeight = '100%';
+        container.style.width = '100%';
+      }
+      return;
+    }
+
+    // 브라우저 툴바 팝업(Extension Action Popup) 환경 (Chrome 팝업 최대 600px 한계 대응):
+    document.documentElement.classList.remove('is-in-iframe');
+    document.body.classList.remove('is-in-iframe');
+
     const availH = window.screen.availHeight || window.screen.height || 800;
     const availW = window.screen.availWidth || window.screen.width || 1200;
-    // 세로 모니터 판별: 세로 해상도가 가로 해상도보다 크거나, 세로 가용 높이가 1000px 이상인 경우
+    // 세로 모니터 판별: 세로 해상도가 가로 해상도보다 크거나, 세로 가용 높이가 1100px 이상인 경우
     const isVertical = (window.screen.height > window.screen.width) || (availH >= 1100);
 
     if (isVertical) {
